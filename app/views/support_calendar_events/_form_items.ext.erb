@@ -37,6 +37,6 @@
   ,<%= f.select :calendarlabelid, SupportCalendarLabel.events.collect{|label| [label.title, label.calendarlabelid]} << [" - None - ", 0], :field_label => "Label" %>
 ]
 ,buttons: [
-  <%= f.submit "Save", :wait_msg => "Saving Event...", :on_success => "Ext.WindowMgr.getActive().close(); Ext.ux.Toast.msg('', 'Saved');" %>
+  <%= f.submit "Save", :wait_msg => "Saving Event...", :on_success => "Ext.WindowMgr.getActive().close(); Ext.Msg.notice('', 'Saved');" %>
   ,<%= f.submit "Cancel", :handler => "Ext.WindowMgr.getActive().close();" %>
 ]
