@@ -3,9 +3,4 @@
   :auto_destroy_store => true,
   :page_size => 20,
   :listeners => lambda { %({rowdblclick: function(grid, row, e) { window.open('#{SUPPORT_URL}/staff/index.php?_m=tickets&_a=viewticket&ticketid=' + grid.getSelectionModel().getSelections()[0].id) }}) },
-  :plugins => [ lambda { 
-    "new Ext.ux.state.ServerStateSelector(#{ext_remote_collection_select("ext_saved_state", "name", 
-      ext_saved_states_path(:state_id => 'Support Tickets', :format => 'json', :escape => false), "ext_saved_state_id_", "ext_saved_state_name_", 
-      :allow_blank => true, :empty_text => "Saved Searches...", :force_selection => false, :id => 'support_tickets_grid_state_selector')})"
-  }]
- %>
+  :plugins => [ lambda { ext_state_selector ext_saved_states_path(:state_id => 'Support Tickets', :format => 'json', :escape => false), :save_public => current_user.has_role?('admin')}] %>
