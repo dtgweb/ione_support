@@ -72,7 +72,7 @@ class SupportCalendarEvent < SupportSuiteBase
     event.start = event_start
     event.end = event_end
     event.summary = subject
-    event.url = SUPPORT_URL + "/staff/index.php?_m=teamwork&_a=editevent&#{calendareventid}"
+    event.url = SUPPORT_URL + "/staff/index.php?_m=teamwork&_a=editevent&calendareventid=#{calendareventid}"
     event.klass = eventtype.upcase
     # http://www.kanzaki.com/docs/ical/organizer.html
     event.organizer = "MAILTO:#{owner.email}" if owner
