@@ -17,6 +17,7 @@ class SupportCalendarEvent < SupportSuiteBase
   before_validation :update_staff
   
   named_scope :planned, :conditions => "swcalendarevents.calendarstatusid = 7 or swcalendarevents.calendarstatusid = 0"
+  named_scope :public, :conditions => {:eventtype => 'public'}
   
   def initialize_with_defaults(attrs = nil, &block)
     initialize_without_defaults(attrs) do
@@ -58,6 +59,38 @@ class SupportCalendarEvent < SupportSuiteBase
     to_timestamp(self.enddateline)
   end
   
+  def owner
+    support_staff_owner ? support_staff_owner : support_staff
+  end
+  
+  def to_ics
+    event = Icalendar::Event.new
+    event_start = start_at
+    event_start.ical_params = {"TZID", Time.zone.tzinfo.name} if event_start
+    event_end = end_at
+    event_end.ical_params = {"TZID", Time.zone.tzinfo.name} if event_end
+    event.start = event_start
+    event.end = event_end
+    event.summary = subject
+    event.url = SUPPORT_URL + "/staff/index.php?_m=teamwork&_a=editevent&#{calendareventid}"
+    event.klass = eventtype.upcase
+    # http://www.kanzaki.com/docs/ical/organizer.html
+    event.organizer = "MAILTO:#{owner.email}" if owner
+    # http://www.kanzaki.com/docs/ical/categories.html
+    event.add_category support_calendar_category.title if support_calendar_category
+    event.alarm do
+      description "Event reminder"
+      trigger "-PT15M" # 15 minutes before
+    end
+    event
+  end
+    
+  def self.to_ics(events)
+    icalendar = Icalendar::Calendar.new
+    events.each {|event| icalendar.add_event(event.to_ics) }
+    icalendar.to_ical
+  end
+  
   # def validate
   #   errors.add(:enddateline, "End date must be after start date") if self.enddateline < self.startdateline
   # end
@@ -66,6 +99,7 @@ class SupportCalendarEvent < SupportSuiteBase
     
     def check_dates
       self.enddateline = self.startdateline + 1800 if self.enddateline == 0
+      self.duration = self.enddateline - self.startdateline
     end
     
     def update_staff

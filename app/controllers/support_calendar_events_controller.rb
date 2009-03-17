@@ -1,7 +1,18 @@
 class SupportCalendarEventsController < ApplicationController
 
+  before_filter :login_required
+  
   make_ext_resourceful do
     actions :all
+    
+    response_for :index do |format|
+       format.ext { render :layout => false }
+       format.ics { render :text => SupportCalendarEvent.to_ics(current_user.support_staff.support_calendar_events + SupportCalendarEvent.public) }
+       format.html
+       format.json do
+         render :json => render_json
+       end
+     end
   end
   
   protected

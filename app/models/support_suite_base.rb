@@ -15,12 +15,12 @@ class SupportSuiteBase < ActiveRecord::Base
       if unixtimestamp == 0
         nil
       else
-        Time.at(unixtimestamp)
+        Time.at(unixtimestamp).to_datetime
       end
     end
     
     def from_timestamp(timestamp)
-      timestamp.to_i
+      timestamp.to_time.to_i
     end
     
     def update_timestamp
