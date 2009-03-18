@@ -4,6 +4,9 @@ class SupportContact < SupportSuiteBase
   
   belongs_to :support_staff, :foreign_key => :staffid
   belongs_to :support_calendar_category, :foreign_key => :calendarcategoryid
+
+  has_many :support_custom_field_links, :foreign_key => :typeid, :conditions => {:linktype => 6}
+  has_many :support_custom_field_groups, :through => :support_custom_field_links
   
   def support_user
     SupportUser.with_email(email_list).first

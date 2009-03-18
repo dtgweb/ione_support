@@ -7,6 +7,8 @@ class SupportCustomField < SupportSuiteBase
   has_many :support_custom_field_values, :foreign_key => :customfieldid
   belongs_to :support_custom_field_group, :foreign_key => :customfieldgroupid
   
+  accepts_nested_attributes_for :support_custom_field_values
+  
   def field_type
     case fieldtype
       when 1: 'text'

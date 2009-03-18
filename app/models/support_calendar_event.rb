@@ -12,15 +12,18 @@ class SupportCalendarEvent < SupportSuiteBase
   belongs_to :support_calendar_priority, :foreign_key => :calendarpriorityid
   
   has_many :support_custom_field_links, :foreign_key => :typeid, :conditions => {:linktype => 7}
-  has_many :support_custom_field_values, :through => :support_custom_field_links
-  validates_presence_of :subject
+  has_many :support_custom_field_groups, :through => :support_custom_field_links
   
+  accepts_nested_attributes_for :support_custom_field_links
+  
+  # make sure all attributes are correctly filled out
+  validates_presence_of :subject
   before_validation :check_dates
   before_validation :update_staff
   
   named_scope :planned, :conditions => "swcalendarevents.calendarstatusid = 7 or swcalendarevents.calendarstatusid = 0"
   named_scope :public, :conditions => {:eventtype => 'public'}
-  
+    
   def initialize_with_defaults(attrs = nil, &block)
     initialize_without_defaults(attrs) do
       setter = lambda { |key, value| self.send("#{key.to_s}=", value) unless

@@ -5,6 +5,7 @@ class SupportTicketTest < Test::Unit::TestCase
   def setup
     Factory(:support_ticket)
     @ticket = Factory(:support_ticket, :email => 'test@test.com')
+    @ticket2 = Factory(:support_ticket, :email => 'test2@test.com')
   end
 
   should "be scoped by email" do

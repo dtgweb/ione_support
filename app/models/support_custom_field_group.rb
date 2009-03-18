@@ -3,6 +3,10 @@ class SupportCustomFieldGroup < SupportSuiteBase
   set_table_name "swcustomfieldgroups"
   
   has_many :support_custom_fields, :foreign_key => :customfieldgroupid
+  has_many :support_custom_field_values, :through => :support_custom_fields
+  has_many :support_custom_field_links, :foreign_key => :customfieldgroupid
+  
+  accepts_nested_attributes_for :support_custom_fields
   
   default_scope :order => 'displayorder ASC'
   
