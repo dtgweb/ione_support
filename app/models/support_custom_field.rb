@@ -4,7 +4,7 @@ class SupportCustomField < SupportSuiteBase
   
   default_scope :order => 'displayorder ASC'
   
-  has_many :support_custom_field_values
+  has_many :support_custom_field_values, :foreign_key => :customfieldid
   belongs_to :support_custom_field_group, :foreign_key => :customfieldgroupid
   
   def field_type
