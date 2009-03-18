@@ -11,6 +11,8 @@ class SupportCalendarEvent < SupportSuiteBase
   belongs_to :support_calendar_status, :foreign_key => :calendarstatusid
   belongs_to :support_calendar_priority, :foreign_key => :calendarpriorityid
   
+  has_many :support_custom_field_links, :foreign_key => :typeid, :conditions => {:linktype => 7}
+  has_many :support_custom_field_values, :through => :support_custom_field_links
   validates_presence_of :subject
   
   before_validation :check_dates
