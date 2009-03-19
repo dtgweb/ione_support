@@ -12,9 +12,10 @@ class SupportCalendarEvent < SupportSuiteBase
   belongs_to :support_calendar_priority, :foreign_key => :calendarpriorityid
   
   has_many :support_custom_field_links, :foreign_key => :typeid, :conditions => {:linktype => 7}
-  has_many :support_custom_field_groups, :through => :support_custom_field_links
-  
-  accepts_nested_attributes_for :support_custom_field_links
+  has_many :support_custom_field_groups, :finder_sql => "SELECT swcustomfieldgroups.* FROM swcustomfieldgroups where grouptype = 7"
+  has_many :support_custom_fields, :finder_sql => "SELECT swcustomfields.* FROM swcustomfields INNER JOIN swcustomfieldgroups ON swcustomfieldgroups.customfieldgroupid = swcustomfields.customfieldgroupid WHERE swcustomfieldgroups.grouptype = 7"
+
+  accepts_nested_attributes_for :support_custom_field_groups
   
   # make sure all attributes are correctly filled out
   validates_presence_of :subject

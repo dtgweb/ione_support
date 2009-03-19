@@ -35,6 +35,22 @@
     <%= ",value: #{current_object.end_at.strftime('"%Y-%m-%d %H:%M:%S %z"')}" if current_object.end_at %>
   }
   ,<%= f.select :calendarlabelid, SupportCalendarLabel.events.collect{|label| [label.title, label.calendarlabelid]} << [" - None - ", 0], :field_label => "Label" %>
+  
+  
+  <% current_object.support_custom_field_groups.each do |group| %>
+    <% f.fields_for :support_custom_field_groups, group do |groups| %>
+      <% groups.fields_for :support_custom_fields, groups.object.support_custom_fields do |fields| %>        
+        <% fields.object.support_custom_field_values.find(:all, :conditions => {:typeid => current_object.id}).each do |field| %>
+          <% fields.fields_for :support_custom_field_values, field do |values| %>
+            ,<%= values.text_field :fieldvalue, :field_label => fields.object.title %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+  
+  
+  
 ]
 ,buttons: [
   <%= f.submit "Save", :wait_msg => "Saving Event...", :on_success => "Ext.WindowMgr.getActive().close(); Ext.Msg.notice('', 'Saved');" %>
