@@ -41,7 +41,7 @@
       ,<%= links.hidden_field :customfieldgroupid %>
     <% end %>
     <% f.fields_for :support_custom_field_values do |values| %>
-      ,<%= values.text_field :fieldvalue, :field_label => values.object.support_custom_field.title %>
+      ,<%= values.text_field :fieldvalue, :field_label => values.object.support_custom_field.title, :value => params[values.object.support_custom_field.title] %>
       ,<%= values.hidden_field :customfieldid %>
     <% end %>
   <% else %>
@@ -57,6 +57,9 @@
       <% end %>
     <% end %>  
   <% end %>
+  
+  ,<%= f.text_area :notes_contents, :field_label => "Notes" %>
+  ,<%= f.hidden_field :notes_datatype, :value => 2 %>
 ]
 ,buttons: [
   <%= f.submit "Save", :wait_msg => "Saving Event...", :on_success => "Ext.WindowMgr.getActive().close(); Ext.Msg.notice('', 'Saved');" %>

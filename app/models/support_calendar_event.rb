@@ -11,6 +11,8 @@ class SupportCalendarEvent < SupportSuiteBase
   belongs_to :support_calendar_status, :foreign_key => :calendarstatusid
   belongs_to :support_calendar_priority, :foreign_key => :calendarpriorityid
   
+  has_dependency :support_calendar_data, :foreign_key => :typeid, :conditions => {:datatype => 2}, :attrs => [:contents, :datatype], :prefix => "notes"
+  
   has_many :support_custom_field_links, :foreign_key => :typeid, :conditions => {:linktype => 7}
   has_many :support_custom_field_groups, :finder_sql => "SELECT swcustomfieldgroups.* FROM swcustomfieldgroups where grouptype = 7"
   has_many :support_custom_fields, :finder_sql => "SELECT swcustomfields.* FROM swcustomfields INNER JOIN swcustomfieldgroups ON swcustomfieldgroups.customfieldgroupid = swcustomfields.customfieldgroupid WHERE swcustomfieldgroups.grouptype = 7"
@@ -18,6 +20,7 @@ class SupportCalendarEvent < SupportSuiteBase
   
   accepts_nested_attributes_for :support_custom_field_links
   accepts_nested_attributes_for :support_custom_field_values
+  accepts_nested_attributes_for :support_calendar_data
   
   def support_custom_field_groups_with_new_record
     new_record? ? SupportCustomFieldGroup.scoped(:conditions => {:grouptype => 7}) : support_custom_field_groups_without_new_record
