@@ -13,6 +13,15 @@ class SupportCalendarEventsController < ApplicationController
          render :json => render_json
        end
      end
+     
+     before :new do
+       current_object.support_custom_field_groups.each do |group|
+         current_object.support_custom_field_links.build :customfieldgroupid => group.id
+         group.support_custom_fields.each do |field|
+           current_object.support_custom_field_values.build :customfieldid => field.id
+         end
+       end
+     end
   end
   
   protected

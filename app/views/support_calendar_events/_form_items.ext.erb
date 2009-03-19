@@ -36,21 +36,27 @@
   }
   ,<%= f.select :calendarlabelid, SupportCalendarLabel.events.collect{|label| [label.title, label.calendarlabelid]} << [" - None - ", 0], :field_label => "Label" %>
   
-  
-  <% current_object.support_custom_field_groups.each do |group| %>
-    <% f.fields_for :support_custom_field_groups, group do |groups| %>
-      <% groups.fields_for :support_custom_fields, groups.object.support_custom_fields do |fields| %>        
-        <% fields.object.support_custom_field_values.find(:all, :conditions => {:typeid => current_object.id}).each do |field| %>
-          <% fields.fields_for :support_custom_field_values, field do |values| %>
+  <% if current_object.new_record? %>
+    <% f.fields_for :support_custom_field_links do |links| %>
+      ,<%= links.hidden_field :customfieldgroupid %>
+    <% end %>
+    <% f.fields_for :support_custom_field_values do |values| %>
+      ,<%= values.text_field :fieldvalue, :field_label => values.object.support_custom_field.title %>
+      ,<%= values.hidden_field :customfieldid %>
+    <% end %>
+  <% else %>
+    <% f.fields_for :support_custom_field_links do |links| %>
+      ,<%= links.hidden_field :customfieldgroupid %>
+      <% links.fields_for :support_custom_field_group, links.object.support_custom_field_group do |group| %>
+        <% group.fields_for :support_custom_fields, group.object.support_custom_fields do |fields| %>
+          <% fields.fields_for :support_custom_field_values, (fields.object.support_custom_field_values.find_by_typeid(current_object.id) || fields.object.support_custom_field_values.build(:typeid => current_object.id)) do |values| %>
             ,<%= values.text_field :fieldvalue, :field_label => fields.object.title %>
+            ,<%= values.hidden_field :typeid %>
           <% end %>
         <% end %>
       <% end %>
-    <% end %>
+    <% end %>  
   <% end %>
-  
-  
-  
 ]
 ,buttons: [
   <%= f.submit "Save", :wait_msg => "Saving Event...", :on_success => "Ext.WindowMgr.getActive().close(); Ext.Msg.notice('', 'Saved');" %>

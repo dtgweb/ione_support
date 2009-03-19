@@ -8,7 +8,7 @@ class SupportCustomFieldGroup < SupportSuiteBase
   
   accepts_nested_attributes_for :support_custom_fields
   
-  default_scope :order => 'displayorder ASC'
+  default_scope :order => 'swcustomfieldgroups.displayorder ASC'
   
   named_scope :teamwork_events, :conditions => {:grouptype => 7}
   named_scope :teamwork_contacts, :conditions => {:grouptype => 6}
@@ -18,6 +18,6 @@ class SupportCustomFieldGroup < SupportSuiteBase
   named_scope :staff_ticket_creation, :conditions => {:grouptype => 3}
   named_scope :user_ticket_creation, :conditions => {:grouptype => 4}
   named_scope :user_and_staff_ticket_creation, :conditions => {:grouptype => 9}
-  named_scope :ticket_time_tracking, :conditions => {:grouptype => 5}
+  named_scope :ticket_time_tracking, :conditions => {:grouptype => 5}  
   
 end

@@ -14,8 +14,16 @@ class SupportCalendarEvent < SupportSuiteBase
   has_many :support_custom_field_links, :foreign_key => :typeid, :conditions => {:linktype => 7}
   has_many :support_custom_field_groups, :finder_sql => "SELECT swcustomfieldgroups.* FROM swcustomfieldgroups where grouptype = 7"
   has_many :support_custom_fields, :finder_sql => "SELECT swcustomfields.* FROM swcustomfields INNER JOIN swcustomfieldgroups ON swcustomfieldgroups.customfieldgroupid = swcustomfields.customfieldgroupid WHERE swcustomfieldgroups.grouptype = 7"
-
-  accepts_nested_attributes_for :support_custom_field_groups
+  has_many :support_custom_field_values, :finder_sql => 'SELECT swcustomfieldvalues.* FROM swcustomfieldvalues INNER JOIN swcustomfields ON swcustomfields.customfieldid = swcustomfieldvalues.customfieldid INNER JOIN swcustomfieldgroups ON swcustomfieldgroups.customfieldgroupid = swcustomfields.customfieldgroupid INNER JOIN swcalendarevents ON swcalendarevents.calendareventid = swcustomfieldvalues.typeid WHERE swcustomfieldgroups.grouptype = 7 and swcalendarevents.calendareventid = #{id}', :foreign_key => :typeid
+  
+  accepts_nested_attributes_for :support_custom_field_links
+  accepts_nested_attributes_for :support_custom_field_values
+  
+  def support_custom_field_groups_with_new_record
+    new_record? ? SupportCustomFieldGroup.scoped(:conditions => {:grouptype => 7}) : support_custom_field_groups_without_new_record
+  end
+  
+  alias_method_chain :support_custom_field_groups, :new_record
   
   # make sure all attributes are correctly filled out
   validates_presence_of :subject
