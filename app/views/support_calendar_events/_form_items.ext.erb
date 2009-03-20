@@ -6,36 +6,10 @@
   ,<%= f.select :calendarstatusid, SupportCalendarStatus.events.collect{|status| [status.title, status.calendarstatusid]} << [" - None - ", 0], :field_label => "Status" %>
   ,<%= f.select :calendarcategoryid, SupportCalendarCategory.events.collect{|category| [category.title, category.calendarcategoryid]} << [" - None - ", 0], :field_label => "Category" %>
   ,<%= f.text_field :location %>
-  ,{
-    xtype:'xdatetime'
-    ,fieldLabel:'Start'
-    ,hiddenName: 'support_calendar_event[start_at]'
-    ,timeFormat:'g:i A T'
-    ,hiddenFormat:'Y-m-d H:i:s O'
-    ,timeConfig: {
-      allowBlank:false    
-    }
-    ,dateConfig: {
-      allowBlank:false
-    }
-    ,value: <%= current_object.start_at.andand.strftime('"%Y-%m-%d %H:%M:%S %z"') || Time.now.end_of_day.advance(:hours => 12, :seconds => 1).strftime('"%Y-%m-%d %H:%M:%S %z"') %>
-  }
-  ,{
-    xtype:'xdatetime'
-    ,fieldLabel:'End'
-    ,hiddenName: 'support_calendar_event[end_at]'
-    ,timeFormat:'g:i A T'
-    ,hiddenFormat:'Y-m-d H:i:s O'
-    ,timeConfig: {
-      allowBlank:true    
-    }
-    ,dateConfig: {
-      allowBlank:true
-    }
-    <%= ",value: #{current_object.end_at.strftime('"%Y-%m-%d %H:%M:%S %z"')}" if current_object.end_at %>
-  }
+  ,<%= f.datetime_select :start_at, :value => current_object.start_at || Time.now.end_of_day.advance(:hours => 12, :seconds => 1) %>
+  ,<%= f.datetime_select :end_at, :value => current_object.end_at %>
   ,<%= f.select :calendarlabelid, SupportCalendarLabel.events.collect{|label| [label.title, label.calendarlabelid]} << [" - None - ", 0], :field_label => "Label" %>
-  
+    
   <% if current_object.new_record? %>
     <% f.fields_for :support_custom_field_links do |links| %>
       ,<%= links.hidden_field :customfieldgroupid %>
