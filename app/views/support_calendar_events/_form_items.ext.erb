@@ -1,13 +1,13 @@
 ,items: [
   <%= f.text_field :subject %>
   ,<%= f.collection_select :ownerstaffid, SupportStaff.all, :staffid, :username, :field_label => "Owner", :value => current_user.support_staff ? current_user.support_staff.staffid : current_object.ownerstaffid %>
-  ,<%= f.select :eventtype, ["public", "private"], :field_label => "Event Type" %>
+  ,<%= f.select :eventtype, ["private", "public"], :field_label => "Event Type" %>
   ,<%= f.select :activitytype, {"call" => 1, "appointment" => 0}, :field_label => "Activity Type" %>
   ,<%= f.select :calendarstatusid, SupportCalendarStatus.events.collect{|status| [status.title, status.calendarstatusid]} << [" - None - ", 0], :field_label => "Status" %>
   ,<%= f.select :calendarcategoryid, SupportCalendarCategory.events.collect{|category| [category.title, category.calendarcategoryid]} << [" - None - ", 0], :field_label => "Category" %>
   ,<%= f.text_field :location %>
   ,<%= f.datetime_select :start_at, :value => current_object.start_at || Time.now.end_of_day.advance(:hours => 12, :seconds => 1) %>
-  ,<%= f.datetime_select :end_at, :value => current_object.end_at %>
+  ,<%= f.datetime_select :end_at, :value => current_object.end_at || Time.now.end_of_day.advance(:hours => 12, :seconds => 1, :minutes => 30) %>
   ,<%= f.select :calendarlabelid, SupportCalendarLabel.events.collect{|label| [label.title, label.calendarlabelid]} << [" - None - ", 0], :field_label => "Label" %>
     
   <% if current_object.new_record? %>
