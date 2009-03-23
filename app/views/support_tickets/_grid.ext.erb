@@ -1,5 +1,6 @@
 <%= ext_grid_tag :support_tickets,
   :ds => lambda { ext_store(:url => "#{objects_path}") },
+  :view => lambda { render "support_tickets/grid/grid_view" },
   :auto_destroy_store => true,
   :page_size => 20,
   :listeners => lambda { %({rowdblclick: function(grid, row, e) { window.open('#{SUPPORT_URL}/staff/index.php?_m=tickets&_a=viewticket&ticketid=' + grid.getSelectionModel().getSelections()[0].id) }}) },

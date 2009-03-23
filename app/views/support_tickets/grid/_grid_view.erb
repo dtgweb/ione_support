@@ -1,0 +1,14 @@
+new Ext.grid.GroupingView({
+  forceFit:true,
+  enableNoGroups: true,
+  hideGroupedColumn: false,
+  groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})',
+  getRowClass : function(row, index) { 
+    switch (row.data['support_ticket[support_ticket_status.title]']) {
+      case 'Closed':
+        return 'ticket-closed';
+      default:
+        return 'ticket-open';
+    }
+  }
+})
