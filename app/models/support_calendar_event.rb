@@ -11,7 +11,7 @@ class SupportCalendarEvent < SupportSuiteBase
   belongs_to :support_calendar_status, :foreign_key => :calendarstatusid
   belongs_to :support_calendar_priority, :foreign_key => :calendarpriorityid
   
-  has_dependency :support_calendar_data, :foreign_key => :typeid, :conditions => {:datatype => 2}, :attrs => [:contents, :datatype], :prefix => "notes"
+  has_dependency :support_calendar_data, :foreign_key => :typeid, :conditions => {:datatype => 2}, :attrs => [:contents, :datatype], :prefix => "notes", :class_name => "SupportCalendarData"
   
   has_many :support_custom_field_links, :foreign_key => :typeid, :conditions => {:linktype => 7}
   has_many :support_custom_field_groups, :finder_sql => "SELECT swcustomfieldgroups.* FROM swcustomfieldgroups where grouptype = 7"
