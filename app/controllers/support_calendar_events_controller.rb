@@ -7,7 +7,7 @@ class SupportCalendarEventsController < ApplicationController
     
     response_for :index do |format|
        format.ext { render :layout => false }
-       format.ics { render :text => SupportCalendarEvent.to_ics(current_user.support_staff.support_calendar_events + SupportCalendarEvent.public) }
+       format.ics { render :text => SupportCalendarEvent.to_ics(current_model.all) }
        format.html
        format.json do
          render :json => render_json
