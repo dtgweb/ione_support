@@ -9,7 +9,6 @@ class SupportCalendarEvent < SupportSuiteBase
   belongs_to :support_calendar_category, :foreign_key => :calendarcategoryid
   belongs_to :support_calendar_label, :foreign_key => :calendarlabelid
   belongs_to :support_calendar_status, :foreign_key => :calendarstatusid
-  belongs_to :support_calendar_priority, :foreign_key => :calendarpriorityid
   
   has_dependency :support_calendar_data, :foreign_key => :typeid, :conditions => {:datatype => 2}, :attrs => [:contents, :datatype], :prefix => "notes", :class_name => "SupportCalendarData"
   
@@ -32,6 +31,8 @@ class SupportCalendarEvent < SupportSuiteBase
   validates_presence_of :subject
   before_validation :check_dates
   before_validation :update_staff
+  before_create :set_dateline
+  before_save :set_lastupdate
   
   named_scope :planned, :conditions => "swcalendarevents.calendarstatusid = 7 or swcalendarevents.calendarstatusid = 0"
   named_scope :public, :conditions => {:eventtype => 'public'}
@@ -113,6 +114,16 @@ class SupportCalendarEvent < SupportSuiteBase
   # end
   
   protected
+    
+    def set_dateline
+      puts 'set dateline'
+      self.dateline = from_timestamp(Time.now)
+    end
+    
+    def set_lastupdate
+      puts 'set lastupdate'
+      self.lastupdate = from_timestamp(Time.now)
+    end
     
     def check_dates
       self.enddateline = self.startdateline + 1800 if self.enddateline == 0

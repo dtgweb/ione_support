@@ -29,28 +29,26 @@ class SupportCalendarEventsController < ApplicationController
   def options_for_json
     {
       :filters => [],
-      :methods => ['created_at', 'updated_at', 'start_at', 'end_at', 'activity_type'],
+      :methods => ['activity_type'],
       :include => {
         :support_staff_owner => {:only => :fullname},
         :support_calendar_status => {:only => :title}, 
         :support_calendar_label => {:only => :title}, 
-        :support_calendar_priority => {:only => :title},
         :support_calendar_category => {:only => :title}
       },
-      :only => ['subject', 'calendareventid'],
-      :extra => ['support_staff_owner.fullname', 'support_calendar_status.title', 'support_calendar_label.title', 'support_calendar_priority.title', 'support_calendar_category.title'],
+      :only => ['subject', 'calendareventid', 'dateline', 'lastupdate', 'startdateline', 'enddateline'],
+      :extra => ['support_staff_owner.fullname', 'support_calendar_status.title', 'support_calendar_label.title', 'support_calendar_category.title'],
       :overrides => [
-        ['subject', {:hidden => false, :sortable => false, :width => 250}],
-        ['support_staff_owner.fullname', {:header => 'Owner', :hidden => false, :sortable => false, :width => 100}],
-        ['activity_type', {:header => 'Type', :hidden => false, :width => 30}],
-      	['support_calendar_status.title', {:header => 'Status', :hidden => false, :width => 30, :sortable => false}],
-      	['support_calendar_label.title', {:header => 'Label', :hidden => false, :width => 30, :sortable => false}],
-      	['support_calendar_priority.title', {:header => 'Priority', :hidden => false, :width => 30, :sortable => false}],
-      	['support_calendar_category.title', {:header => 'Category', :hidden => false, :width => 30, :sortable => false}],
-      	['created_at', {:header => 'Created On', :renderer => "Ext.util.Format.dateRenderer('m/d/Y g:i A T')", :width => 75}],
-      	['updated_at', {:header => 'Updated On', :renderer => "Ext.util.Format.dateRenderer('m/d/Y g:i A T')", :width => 75}],
-      	['start_at', {:header => 'Start', :hidden => false, :renderer => "Ext.util.Format.dateRenderer('m/d/Y g:i A T')"}],
-      	['end_at', {:header => 'End', :hidden => false, :renderer => "Ext.util.Format.dateRenderer('m/d/Y g:i A T')"}]
+        ['subject', {:hidden => false, :width => 250}],
+        ['support_staff_owner.fullname', {:header => 'Owner', :hidden => false, :width => 100}],
+        ['activity_type', {:header => 'Type', :hidden => false, :width => 30, :sortable => false}],
+      	['support_calendar_status.title', {:header => 'Status', :hidden => false, :width => 30}],
+      	['support_calendar_label.title', {:header => 'Label', :hidden => false, :width => 30}],
+      	['support_calendar_category.title', {:header => 'Category', :hidden => false, :width => 30}],
+      	['dateline', {:header => 'Created At', :renderer => "Ext.util.Format.dateRenderer('m/d/Y g:i A T')", :width => 75}],
+      	['lastupdate', {:header => 'Updated At', :renderer => "Ext.util.Format.dateRenderer('m/d/Y g:i A T')", :width => 75}],
+      	['startdateline', {:header => 'Start', :hidden => false, :renderer => "Ext.util.Format.dateRenderer('m/d/Y g:i A T')"}],
+      	['enddateline', {:header => 'End', :hidden => false, :renderer => "Ext.util.Format.dateRenderer('m/d/Y g:i A T')"}]
       ]
     }
   end
@@ -75,7 +73,7 @@ class SupportCalendarEventsController < ApplicationController
     
   def current_objects
     @current_objects ||= paginate_current_objects :include => {
-      :support_calendar_status => [:title], :support_calendar_label => [:title], :support_calendar_label => [:title], :support_calendar_category => [:title], :support_staff_owner => [:fullname]
+      :support_calendar_status => [:title], :support_calendar_label => [:title], :support_calendar_category => [:title], :support_staff_owner => [:fullname]
     }, :sort => 'support_calendar_event[startdateline]', :dir => 'ASC'
   end
 end
