@@ -1,7 +1,7 @@
 <%= ext_grid_tag "support_calendar_events_grid", :ds => lambda { "Ext.StoreMgr.get('support_calendar_events')" },
   :actions => [
-    lambda { ext_action("New", ext_confirm_changes_function("function() { #{ext_remote_function :url => "#{new_support_calendar_event_path}.js"} }"), {'icon_cls' => 'add'}) }, 
-    lambda { ext_edit_record_action(objects_path) }, 
+    lambda { ext_new_record_action("#{new_support_calendar_event_path}.js", :id => "new_support_calendar_event_action", :loading => true) }, 
+    lambda { ext_edit_record_action(objects_path, :id => "edit_support_calendar_event_action", :loading => true) },
     lambda { ext_delete_record_action("Event", objects_path) }
   ]
 %>
