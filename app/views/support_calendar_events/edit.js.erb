@@ -1,0 +1,18 @@
+var win = new PopupWindow ({
+	title: 'Edit Event - <%= escape_javascript current_object.subject %>',
+	id: '<%= edit_support_calendar_event_path(current_object.id) %>',
+	items: [
+    <% ext_form_for current_object, :html => {
+        :frame => true, 
+        :auto_scroll => true } do |f| %>
+      ,items: [<%= render :partial => "form_items", :locals => { :f => f } %>]
+      ,buttons: [
+        <%= f.submit "Save", :wait_msg => "Saving Event..." %>
+        ,<%= f.submit "Cancel", :handler => "Ext.WindowMgr.getActive().close();" %>
+      ]
+    <% end %>
+  ]
+});
+win.on('close', function(comp) { try { Ext.StoreMgr.get('support_calendar_events').reload(); } catch(err) {}}, this);
+win.show();
+win.doLayout();
