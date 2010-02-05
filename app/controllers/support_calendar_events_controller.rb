@@ -41,12 +41,12 @@ class SupportCalendarEventsController < ApplicationController
       :overrides => [
         ['subject', {:hidden => false, :width => 250}],
         ['support_staff_owner.fullname', {:header => 'Owner', :hidden => false, :width => 100}],
-        ['activity_type', {:header => 'Type', :hidden => false, :width => 30, :sortable => false}],
-      	['support_calendar_status.title', {:header => 'Status', :hidden => false, :width => 30}],
-      	['support_calendar_label.title', {:header => 'Label', :hidden => false, :width => 30}],
-      	['support_calendar_category.title', {:header => 'Category', :hidden => false, :width => 30}],
-      	['dateline', {:header => 'Created At', :renderer => "Ext.util.Format.dateRenderer('m/d/Y g:i A T')", :width => 75}],
-      	['lastupdate', {:header => 'Updated At', :renderer => "Ext.util.Format.dateRenderer('m/d/Y g:i A T')", :width => 75}],
+        ['activity_type', {:header => 'Type', :hidden => false, :width => 50, :sortable => false}],
+      	['support_calendar_status.title', {:header => 'Status', :hidden => false, :width => 50}],
+      	['support_calendar_label.title', {:header => 'Label', :hidden => false, :width => 50}],
+      	['support_calendar_category.title', {:header => 'Category', :hidden => false, :width => 50}],
+      	['dateline', {:header => 'Created At', :renderer => "Ext.util.Format.dateRenderer('m/d/Y g:i A T')", :width => 80}],
+      	['lastupdate', {:header => 'Updated At', :renderer => "Ext.util.Format.dateRenderer('m/d/Y g:i A T')", :width => 80}],
       	['startdateline', {:header => 'Start', :hidden => false, :renderer => "Ext.util.Format.dateRenderer('m/d/Y g:i A T')"}],
       	['enddateline', {:header => 'End', :hidden => false, :renderer => "Ext.util.Format.dateRenderer('m/d/Y g:i A T')"}]
       ]
